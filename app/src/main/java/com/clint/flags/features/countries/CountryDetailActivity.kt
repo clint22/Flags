@@ -34,7 +34,7 @@ class CountryDetailActivity : AppCompatActivity(),
     private var countries: List<Countries>? = null
     private var country: Countries? = null
     private var loadedFirstTime = true
-    private var picturePosition: Int = 0
+    private var countryPosition: Int = 0
     private lateinit var binding: ActivityCountryDetailBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         if (savedInstanceState != null) {
@@ -47,7 +47,6 @@ class CountryDetailActivity : AppCompatActivity(),
         binding = ActivityCountryDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initialiseView()
-//        loadCountries()
         setClickListeners()
         with(countriesViewModel) {
             observe(countries, ::renderCountries)
@@ -83,29 +82,25 @@ class CountryDetailActivity : AppCompatActivity(),
         this.countries = countries
         countriesAdapterScroll.countriesList = countries.orEmpty()
         binding.run {
-            picturesScrollView.setOrientation(DSVOrientation.HORIZONTAL)
-            picturesScrollView.addOnItemChangedListener(this@CountryDetailActivity)
+            countriesScrollView.setOrientation(DSVOrientation.HORIZONTAL)
+            countriesScrollView.addOnItemChangedListener(this@CountryDetailActivity)
             infiniteAdapter = InfiniteScrollAdapter.wrap(countriesAdapterScroll)
-            picturesScrollView.adapter = infiniteAdapter
-            picturesScrollView.setItemTransitionTimeMillis(ITEM_TRANSITION_TIME_IN_MILLIS)
-            picturesScrollView.setItemTransformer(
+            countriesScrollView.adapter = infiniteAdapter
+            countriesScrollView.setItemTransitionTimeMillis(ITEM_TRANSITION_TIME_IN_MILLIS)
+            countriesScrollView.setItemTransformer(
                 ScaleTransformer.Builder().setMinScale(ITEM_TRANSITION_MIN_SCALE).build()
             )
-            picturesScrollView.scrollToPosition(picturePosition)
+            countriesScrollView.scrollToPosition(countryPosition)
             progressDiscreetScroll.visibility = View.GONE
-            picturesScrollView.visibility = View.VISIBLE
+            countriesScrollView.visibility = View.VISIBLE
         }
-    }
-
-    private fun loadCountries() {
-        countriesViewModel.loadCountries()
     }
 
     private fun initialiseView() {
-        intent.getIntExtra(pictureExtraPositionName, 0).let {
-            picturePosition = it
+        intent.getIntExtra(countryExtraPositionName, 0).let {
+            countryPosition = it
         }
-        intent.parcelable<Countries>(pictureExtraName)?.let {
+        intent.parcelable<Countries>(countryExtraName)?.let {
             country = it
             country?.apply {
                 setupDetailView(
@@ -165,8 +160,8 @@ class CountryDetailActivity : AppCompatActivity(),
     }
 
     companion object {
-        private const val pictureExtraName = INTENT_KEY_COUNTRY_EXTRA_NAME
-        private const val pictureExtraPositionName = INTENT_KEY_COUNTRY_EXTRA_POSITION_NAME
+        private const val countryExtraName = INTENT_KEY_COUNTRY_EXTRA_NAME
+        private const val countryExtraPositionName = INTENT_KEY_COUNTRY_EXTRA_POSITION_NAME
         fun startActivity(
             context: Context,
             transformationLayout: TransformationLayout,
@@ -174,8 +169,8 @@ class CountryDetailActivity : AppCompatActivity(),
             position: Int
         ) {
             val intent = Intent(context, CountryDetailActivity::class.java)
-            intent.putExtra(pictureExtraName, pictures)
-            intent.putExtra(pictureExtraPositionName, position)
+            intent.putExtra(countryExtraName, pictures)
+            intent.putExtra(countryExtraPositionName, position)
             TransformationCompat.startActivity(transformationLayout, intent)
 
         }

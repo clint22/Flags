@@ -56,21 +56,21 @@ class CountriesActivity : AppCompatActivity() {
         }
         binding.apply {
             lottieError.visibility = View.VISIBLE
-            recyclerViewPictures.visibility = View.GONE
+            recyclerViewCountries.visibility = View.GONE
         }
     }
 
     private fun renderCountries(countries: List<Countries>?) {
         countriesAdapter.countriesList = countries.orEmpty()
         binding.apply {
-            recyclerViewPictures.visibility = View.VISIBLE
+            recyclerViewCountries.visibility = View.VISIBLE
             lottieError.visibility = View.GONE
-            recyclerViewPictures.unVeil()
+            recyclerViewCountries.unVeil()
         }
     }
 
     private fun initialiseView() {
-        binding.recyclerViewPictures.run {
+        binding.recyclerViewCountries.run {
             setVeilLayout(R.layout.row_flags)
             setAdapter(countriesAdapter)
             setLayoutManager(GridLayoutManager(this@CountriesActivity, GRID_SPAN_COUNT))
